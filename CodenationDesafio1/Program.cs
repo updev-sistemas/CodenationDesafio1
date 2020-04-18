@@ -28,12 +28,12 @@ namespace CodenationDesafio1
         {
             try
             {
-                int MIN = 65, // A
-                    MAX = 90, // Z
+                int MIN = 97, // A
+                    MAX = 122, // Z
                     localDisplacement = answer.Displacement % (MAX - MIN); // Não importa a quantidade de 
                                                                            // deslocamento, ele deve permanecer no ciclo
                 StringBuilder sb = new StringBuilder();
-                char[] text = answer.EncryptMessage.ToUpper().ToCharArray();
+                char[] text = answer.EncryptMessage.ToLower().ToCharArray();
 
                 for (int i = 0; i < answer.EncryptMessage.Length; i++) 
                 {
@@ -57,8 +57,8 @@ namespace CodenationDesafio1
                     }
                 }
 
-                answer.DecryptMessage = sb.ToString();
-                answer.Hash = HashSHA1(answer.DecryptMessage);
+                answer.DecryptMessage = sb.ToString().ToLower();
+                answer.Hash = HashSHA1(answer.DecryptMessage).ToLower();
 
                 Console.WriteLine(answer.DecryptMessage);
             }

@@ -12,7 +12,15 @@ namespace CodenationDesafio1.model
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            var obj = new
+            {
+                numero_casas = Displacement,
+                token = Token,
+                cifrado = EncryptMessage,
+                decifrado = DecryptMessage,
+                resumo_criptografico = Hash
+            };
+            return JsonConvert.SerializeObject(obj);
         }
     }
 }

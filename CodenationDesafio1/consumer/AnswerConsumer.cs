@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace CodenationDesafio1.consumer
@@ -99,33 +101,27 @@ namespace CodenationDesafio1.consumer
 
             try
             {
-                HttpWebRequest request = null;
-                Uri uri = new Uri($"{_endpoint_register}?token={_token}");
-                request = (HttpWebRequest)WebRequest.Create(uri);
-                request.Method = "POST";
-                request.UserAgent = "NPPD";
-                request.ContentType = "multipart/form-data; boundary=myboundary";
+                HttpClient client = new HttpClient();
 
-                string json = System.IO.File.ReadAllText(@"C:\output\answer.json");
-                byte[] data = Encoding.Unicode.GetBytes(json);
-                request.ContentLength = data.Length;
-
-
-                using (Stream writeStream = request.GetRequestStream())
+                MultipartFormDataContent form = new MultipartFormDataContent();
+                HttpContent content = new StringContent("fileToUpload");
+                form.Add(content, "fileToUpload");
+                var stream = new FileStream(@"C:\output\answer.json", FileMode.Open);
+                content = new StreamContent(stream);
+                var fileName =  content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
                 {
-                    writeStream.Write(data, 0, data.Length);
-                }
-                string result = string.Empty;
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                {
-                    using (Stream responseStream = response.GetResponseStream())
-                    {
-                        using (StreamReader readStream = new StreamReader(responseStream, Encoding.UTF8))
-                        {
-                            result = readStream.ReadToEnd();
-                        }
-                    }
-                }
+                    Name = "answer",
+                    FileName = Path.GetFileName(@"C:\output\answer.json"),
+                };
+                form.Add(content);
+                HttpResponseMessage response = null;
+
+
+                string url = $"{_endpoint_register}?token={_token}";
+                var endpoint = new Uri(url);
+                response = (client.PostAsync(endpoint, form)).Result;
+                var text= Convert.ToString(response);
+
                 Console.WriteLine("Atividade Concluida");
             }
             catch (WebException a)
