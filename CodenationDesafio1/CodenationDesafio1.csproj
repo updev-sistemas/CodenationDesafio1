@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="consumer\AnswerConsumer.cs" />
     <Compile Include="json\AnswerJSON.cs" />
+    <Compile Include="logic\CesarCipher.cs" />
     <Compile Include="model\Answer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
